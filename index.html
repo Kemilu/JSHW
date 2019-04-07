@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Hangman</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body>
+	<header>Hang Five! Word Guessing Game</header>
+	<div class="container-fluid">
+
+		<div class="row content">
+			<div class="col-md-4">
+				<img class="img-responsive img-center" src="assets/images/hangman.jpg" alt="smimg">
+			</div>
+			<div class="col-md-8">
+				<div id="static">
+					<p>Press any key!</p>
+
+					<p id="answerArray"></p>
+				</div>
+				<p id="game"></p>
+			</div>
+			<script>
+				var words = ["apple", "barge", "blown", "cast", "candy", "car", "cash", "calm", "chime", "cool", "coast", "cookie", "carve", "deep", "dude", "decent", "dayum", "dank", "done", "dunk", "excellent", "ever", "fam", "family", "freeze", "frank", "gnarly", "good", "gang", "holy", "how", "huh", "hole", "ice", "jam", "leverage", "lank", "murky", "man", "mister", "no", "pains", "parade", "party", "pie", "plank", "poor", "push", "pressure", "put", "pain", "punch", "rank", "roast", "rush", "scared", "snale", "strange", "season", "sledding", "slay", "shark", "spirit", "stare", "stickler", "stock", "tidings", "tide", "togetherness", "toys", "tradition", "traffic", "tree", "trips", "turkey", "vacation", "vexed", "wader", "worship", "wrath", "yup", "yo", "stellar"];
+				var wins = 0
+				console.log(wins);
+				var guesses = 7;
+				var GuessList = [];
+
+				var word = words[Math.floor(Math.random() * words.length)].toLowerCase();;
+				console.log(word);
+
+				var answerArray = [];
+				for (var i = 0; i < word.length; i++) {
+					answerArray[i] = "_";
+				}
+				var remainingLetters = word.length;
+
+				var reset = function () {
+					guesses = 7;
+					GuessList.length = 0;
+					word = words[Math.floor(Math.random() * words.length)].toLowerCase();
+					console.log("new word " + word)
+					answerArray = [];
+					for (var j = 0; j < word.length; j++) {
+						answerArray[j] = "_";
+					}
+					remainingLetters = word.length;
+
+					document.getElementById("answerArray").innerHTML = answerArray.join(" ");
+
+				}
+
+				document.onkeyup = function (event) {
+
+					var guess = event.key.toLowerCase();
+
+					if (word.indexOf(guess) === -1 && GuessList.indexOf(guess) === -1) {
+						console.log('wrong guess.');
+						GuessList.push(guess);
+						console.log(GuessList)
+						--guesses;
+					}
+
+					else {
+						if (GuessList.indexOf(guess) === -1) {
+							GuessList.push(guess);
+
+							for (var i = 0; i < word.length; i++) {
+								if (word[i] === guess) {
+									answerArray[i] = guess;
+									console.log(answerArray);
+									remainingLetters--;
+									console.log("remaining letters: " + remainingLetters);
+								}
+							}
+						}
+						else {
+							alert('Previously guessed! Try again')
+						}
+
+					}
+
+					if (remainingLetters >= 0) {
+						document.getElementById("answerArray").innerHTML = answerArray.join(" ");
+					}
+
+					//Outcomes
+					if (remainingLetters === 0) {
+						wins++;
+						alert("you win!");
+						reset();
+					}
+
+					if (guesses === 0) {
+						alert("Almost! But not quite. You lost!")
+						reset();
+					}
+
+					var html =
+						"<p> Wins: " + wins + "</p>" +
+						"<p> Guesses remaining: " + guesses + "</p>" +
+						"<p> Letters guessed: " + GuessList + "</p>";
+					document.querySelector("#game").innerHTML = html;
+				};
+
+			</script>
+
+</body>
+
+</html>
